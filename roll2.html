@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抽獎程式</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>抽獎程式</h1>
+    <label for="draws">輸入抽獎次數：</label>
+    <input type="number" id="draws" min="1" value="1">
+    <button onclick="draw()">抽獎</button>
+    <div class="results" id="results"></div>
+
+    <script>
+        const items = [
+            { name: '天上的氣息', probability: 0.005 },
+            { name: '赤之寶石圖騰', probability: 0.0035 },
+            { name: '綠之寶石圖騰', probability: 0.0035 },
+            { name: '青之寶石圖騰', probability: 0.0035 },
+            { name: '黃之寶石圖騰', probability: 0.0035 },
+            { name: '彩虹月石寶石圖騰', probability: 0.001 },
+            { name: '漆黑的BOSS飾品碎片', probability: 0.03 },
+            { name: '神秘冥界武器變換箱', probability: 0.003 },
+            { name: '神秘冥界防具變換箱', probability: 0.003 },
+            { name: '星力16星強化券', probability: 0.004 },
+            { name: '星力15星強化券', probability: 0.004 },
+            { name: '星力14星強化券', probability: 0.004 },
+            { name: '鈦之心', probability: 0.004 },
+            { name: '妖精之心', probability: 0.004 },
+            { name: '露希妲靈魂寶珠', probability: 0.003 },
+            { name: '艾畢奈亞的靈魂寶珠', probability: 0.003 },
+            { name: '黃金鐵鎚100%', probability: 0.008 },
+            { name: '特別附加潛在能力賦予卷軸', probability: 0.008 },
+            { name: '睿智葫蘆', probability: 0.004 },
+            { name: '破曉墜飾', probability: 0.0075 },
+            { name: '星耀耳環', probability: 0.0075 },
+            { name: '暮光印記', probability: 0.0075 },
+            { name: '黎明守護者天使戒指', probability: 0.0075 },
+            { name: '稀有航海師武器選擇箱', probability: 0.026 },
+            { name: '稀有航海師防具選擇箱', probability: 0.044 },
+            { name: '核心寶石20個交換券', probability: 0.05 },
+            { name: '暗黑輪迴星火', probability: 0.06 },
+            { name: '永遠的輪迴星火', probability: 0.013 },
+            { name: '奧術之河水滴石', probability: 0.0185 },
+            { name: '太初的水滴石', probability: 0.0185 },
+            { name: '水中信紙眼飾', probability: 0.015 },
+            { name: '凝聚力量的結晶石', probability: 0.015 },
+            { name: '銀花戒指', probability: 0.015 },
+            { name: '戴雅希杜斯耳環', probability: 0.015 },
+            { name: '混沌闇黑龍王的項鍊', probability: 0.015 },
+            { name: '金花草腰帶', probability: 0.015 },
+            { name: '梅克奈特墜飾', probability: 0.015 },
+            { name: '皇家暗黑合金護肩', probability: 0.015 },
+            { name: '支配者墜飾', probability: 0.015 },
+            { name: '星力13星強化券', probability: 0.015 },
+            { name: '星力12星強化券', probability: 0.015 },
+            { name: '水晶愛心', probability: 0.015 },
+            { name: '鋰愛心', probability: 0.015 },
+            { name: '強力輪迴星火', probability: 0.014 },
+            { name: '製作物品 20格欄位背包', probability: 0.012 },
+            { name: '製作法20格背包', probability: 0.012 },
+            { name: '椅子20格欄位背包', probability: 0.012 },
+            { name: '稱號20格名片夾', probability: 0.012 },
+            { name: '卷軸20格背包', probability: 0.012 },
+            { name: '回真卷軸 100%', probability: 0.015 },
+            { name: '稀有潛在能力卷軸100%', probability: 0.014 },
+            { name: '幸運日卷軸', probability: 0.015 },
+            { name: '機器人商店使用卷 (30天)', probability: 0.015 },
+            { name: '初級能量硬幣(A級)', probability: 0.017 },
+            { name: '微弱烙印的靈魂石', probability: 0.017 },
+            { name: '星力11星強化券', probability: 0.017 },
+            { name: '星力10星強化券', probability: 0.017 },
+            { name: '選擇欄位8格擴充券', probability: 0.017 },
+            { name: '黃金愛心', probability: 0.017 },
+            { name: '經驗累積的秘藥', probability: 0.0065 },
+            { name: '獲得財物的秘藥', probability: 0.0065 },
+            { name: '忍耐的秘藥', probability: 0.0065 },
+            { name: '覺醒的秘藥', probability: 0.0065 },
+            { name: '無敵的秘藥', probability: 0.0065 },
+            { name: '最上級力量強化秘藥', probability: 0.007 },
+            { name: '最上級智慧強化秘藥', probability: 0.007 },
+            { name: '最上級敏捷強化秘藥', probability: 0.007 },
+            { name: '最上級幸運強化秘藥', probability: 0.007 },
+            { name: '傳說中的英雄秘藥', probability: 0.0065 },
+            { name: '傳說中的祝福秘藥', probability: 0.007 },
+            { name: '最上級英雄的秘藥', probability: 0.007 },
+            { name: '最上級祝福的秘藥', probability: 0.007 },
+            { name: '皮卡啾的靈魂寶珠', probability: 0.015 },
+            { name: '凡雷恩的靈魂寶珠', probability: 0.015 },
+            { name: '搖滾精神的靈魂寶珠', probability: 0.015 },
+            { name: '闇黑龍王的靈魂寶珠', probability: 0.015 },
+            { name: '雷克斯的靈魂寶珠', probability: 0.015 },
+            { name: '龍騎士的靈魂寶珠', probability: 0.015 },
+            { name: '殘暴炎魔的靈魂寶珠', probability: 0.015 },
+            { name: '亞尼的靈魂寶珠', probability: 0.015 }
+        ];
+
+        function draw() {
+            const draws = parseInt(document.getElementById('draws').value);
+            const results = {};
+
+            // 初始化結果
+            for (const item of items) {
+                results[item.name] = 0;
+            }
+
+            for (let i = 0; i < draws; i++) {
+                let randomNum = Math.random();
+                let accumulatedProbability = 0;
+
+                for (const item of items) {
+                    accumulatedProbability += item.probability;
+                    if (randomNum < accumulatedProbability) {
+                        results[item.name]++;
+                        break;
+                    }
+                }
+            }
+
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<h2>抽獎結果：</h2>`;
+            
+            for (const [name, count] of Object.entries(results)) {
+                resultsDiv.innerHTML += `<p>${name}: ${count} 次</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
