@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>掉寶計時懶人包</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      text-align: center;
+      background-color: #fff8f0;
+      padding: 30px;
+    }
+    h1 {
+      color: #d35400;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      background-color: #f39c12;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .timer {
+      font-size: 24px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>掉寶機制懶人包計時器</h1>
+
+  <div>
+    <button onclick="startTimer(10 * 60)">🕒 觀察期 10 分鐘</button>
+    <button onclick="startTimer(30 * 60)">🔁 延長期 30 分鐘</button>
+  </div>
+
+  <div class="timer" id="timerDisplay">尚未開始</div>
+
+  <button onclick="stopTimer()">⏹ 停止計時</button>
+
+  <script>
+    let timerInterval;
+    let remaining = 0;
+
+    function startTimer(seconds) {
+      clearInterval(timerInterval);
+      remaining = seconds;
+      updateDisplay();
+      timerInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          alert("⏰ 時間到！請檢查是否有掉落物，決定是否換頻道！");
+        }
+        updateDisplay();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      document.getElementById("timerDisplay").innerText = "計時已停止";
+    }
+
+    function updateDisplay() {
+      const min = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const sec = String(remaining % 60).padStart(2, '0');
+      document.getElementById("timerDisplay").innerText = `剩餘時間：${min}:${sec}`;
+    }
+  </script>
+
+</body>
+</html>
