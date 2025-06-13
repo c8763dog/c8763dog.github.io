@@ -4,32 +4,52 @@
   <meta charset="UTF-8">
   <title>掉寶計時懶人包</title>
   <style>
+    :root {
+      --bg-color: #1e1e1e;
+      --text-color: #ffffff;
+      --button-color: #f39c12;
+      --button-text-color: #ffffff;
+    }
+
     body {
       font-family: "Microsoft JhengHei", sans-serif;
       text-align: center;
-      background-color: #fff8f0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       padding: 30px;
+      transition: background-color 0.3s, color 0.3s;
     }
+
     h1 {
-      color: #d35400;
+      color: var(--button-color);
     }
+
     button {
       padding: 10px 20px;
       margin: 10px;
       font-size: 16px;
-      background-color: #f39c12;
+      background-color: var(--button-color);
+      color: var(--button-text-color);
       border: none;
-      color: white;
       border-radius: 5px;
       cursor: pointer;
     }
+
     .timer {
       font-size: 24px;
       margin: 20px 0;
     }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
   </style>
 </head>
 <body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">🌗 切換主題</button>
 
   <h1>掉寶機制懶人包計時器</h1>
 
@@ -45,6 +65,7 @@
   <script>
     let timerInterval;
     let remaining = 0;
+    let isDark = true; // 預設深色主題
 
     function startTimer(seconds) {
       clearInterval(timerInterval);
@@ -70,6 +91,24 @@
       const sec = String(remaining % 60).padStart(2, '0');
       document.getElementById("timerDisplay").innerText = `剩餘時間：${min}:${sec}`;
     }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      if (isDark) {
+        document.documentElement.style.setProperty('--bg-color', '#1e1e1e');
+        document.documentElement.style.setProperty('--text-color', '#ffffff');
+        document.documentElement.style.setProperty('--button-color', '#f39c12');
+        document.documentElement.style.setProperty('--button-text-color', '#ffffff');
+      } else {
+        document.documentElement.style.setProperty('--bg-color', '#fff8f0');
+        document.documentElement.style.setProperty('--text-color', '#000000');
+        document.documentElement.style.setProperty('--button-color', '#f39c12');
+        document.documentElement.style.setProperty('--button-text-color', '#ffffff');
+      }
+    }
+
+    // 預設套用深色主題
+    toggleTheme();
   </script>
 
 </body>
