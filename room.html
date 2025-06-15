@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>數字順序比較</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    #number {
+      font-size: 48px;
+      margin: 20px;
+    }
+    #direction {
+      font-size: 24px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>數字顯示與比較</h1>
+  <div id="number">1</div>
+  <div id="direction">請點擊按鈕</div>
+  <button onclick="nextNumber()">下一個</button>
+
+  <script>
+    const numbers = [1, 10, 9, 13, 11, 6, 12, 2, 5, 15, 8, 4, 7, 3, 14];
+    let index = 0;
+
+    function nextNumber() {
+      if (index < numbers.length - 1) {
+        const current = numbers[index];
+        const next = numbers[index + 1];
+        index++;
+
+        document.getElementById('number').textContent = next;
+
+        if (next > current) {
+          document.getElementById('direction').textContent = '往下';
+        } else if (next < current) {
+          document.getElementById('direction').textContent = '往上';
+        } else {
+          document.getElementById('direction').textContent = '相同';
+        }
+      } else {
+        document.getElementById('direction').textContent = '已經是最後一個數字';
+      }
+    }
+  </script>
+
+</body>
+</html>
